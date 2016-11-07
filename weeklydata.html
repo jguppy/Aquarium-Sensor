@@ -3,7 +3,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 		<META HTTP-EQUIV="REFRESH" CONTENT="180">
 		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
-		<title>Weekly Data</title>
+		<title>Jarrods Weekly Data</title>
 		
 		
 		<!-- 1. Add these JavaScript inclusions in the head of your page -->
@@ -18,34 +18,27 @@
 //load .txt files into series
 
 $.ajax({
-        url:'http://macca.myreef.info/weekly_average_ph.txt',
+        url:'http://jarrod.aquarium.info/weekly_average_ph.txt',
         async:false,
         success: function(data){
                 phseries = data.split(',');
         }
 });
 $.ajax({
-        url:'http://macca.myreef.info/weekly_average_orp.txt',
-        async:false,
-        success: function(data){
-                orpseries = data.split(',');
-        }
-});
-$.ajax({
-        url:'http://macca.myreef.info/weekly_average_tank.txt',
+        url:'http://jarrod.aquarium.info/weekly_average_tank.txt',
         async:false,
         success: function(data){
                 tankseries = data.split(',');        }
 });
 $.ajax({
-        url:'http://macca.myreef.info/weekly_average_heater.txt',
+        url:'http://jarrod.aquarium.info/weekly_average_sump.txt',
         async:false,
         success: function(data){
                 heaterseries = data.split(',');
         }
 });
 $.ajax({
-        url:'http://macca.myreef.info/weekly_average_room.txt',
+        url:'http://jarrod.aquarium.info/weekly_average_room.txt',
         async:false,
         success: function(data){
                 roomseries = data.split(',');
@@ -58,21 +51,18 @@ $.ajax({
                 epochseries = data.split(',');
         }
 });
+		
 //Convert all <x>series from strings to int
 
 for(var i=0, len=phseries.length; i<len; i++)
         {
         phseries[i] = phseries[i]*1;
         }
-for(var i=0, len=orpseries.length; i<len; i++)
-        {
-        orpseries[i] = orpseries[i]*1;
-        }
 for(var i=0, len=tankseries.length; i <len; i++)
         {
         tankseries[i] = tankseries[i]*1;
         }
-for(var i=0, len=heaterseries.length; i <len; i++)
+for(var i=0, len=sumpseries.length; i <len; i++)
         {
         heaterseries[i] = heaterseries[i]*1;
         }
@@ -111,7 +101,7 @@ for(var i=0, len=epochseries.length; i <len; i++)
 				x: -20 //center
 			},
 			subtitle: {
-				text: 'My Tank',
+				text: 'Office Aquarium',
 				x: -20
 			},
 			xAxis: {
@@ -120,31 +110,25 @@ for(var i=0, len=epochseries.length; i <len; i++)
 			},
 			yAxis: [
 				{ //Primary [0]
-					title: {
-						text: 'orp'
-					},
-					id: 'ORP',
-					opposite: true,
-					min: 350,
-					max: 450
+					title: {text: 'pH'},
+					id: 'pH',
+					min: 6,
+					max: 10
 				},
 				{ //Secondary [1]
-					title: {
-						text: 'pH'
-					},
-					id: 'pH',
-					min: minph*0.9,
-					max: maxph*1.1
-				},
-				{ //Tertiary [2]
-					title: {
-						text: 'Temp'
-					},
+				title: {text: 'Temp'},
 				id: 'Temp',
 				min: 20,
-				max: 30,
+				max: 33,
 				opposite: false
-       			}],
+				}]
+				//{ //Tertiary [2]
+				//title: {text: 'Salinty'},
+				//id: 'Salinty',
+				//min: 25,
+				//max: 40,
+				//opposite: false
+       			
 			tooltip: {
 				crosshairs: true,
 				shared: true
@@ -161,21 +145,21 @@ for(var i=0, len=epochseries.length; i <len; i++)
 				data: phseries,
 				yAxis: 'pH'
 			}, {
-                                name: 'Tank',
+                                name: 'Tank Temp',
                                 data: tankseries,
                                 yAxis: 'Temp'
 			}, {
-				name: 'Heater',
-				data: heaterseries,
+				name: 'Sump Temp',
+				data: sumpseries,
 				yAxis: 'Temp'
                         }, {
-                                name: 'Room',
+                                name: 'Room Temp',
                                 data: roomseries,
                                 yAxis: 'Temp'
-			}, {
-				name: 'ORP',
-				data: orpseries,
-				yAxis: 'ORP'
+			//}, {
+				//name: 'Sanilty',
+				//data: orpseries,
+				//yAxis: 'ORP'
 			}]
 		};
 	var chart = new Highcharts.Chart(options);
@@ -194,13 +178,6 @@ $.ajax({
         }
 });
 $.ajax({
-        url:'weekly_average_orp.txt',
-        async:false,
-        success: function(data){
-                orpseries = data.split(',');
-        }
-});
-$.ajax({
         url:'weekly_average_tank.txt',
         async:false,
         success: function(data){
@@ -208,7 +185,7 @@ $.ajax({
         }
 });
 $.ajax({
-        url:'weekly_average_heater.txt',
+        url:'weekly_average_sump.txt',
         async:false,
         success: function(data){
                 heaterseries = data.split(',');
@@ -242,15 +219,6 @@ for(var i=0, len=phseries.length; i<len; i++)
 
 }
 
-heateruse = 0;
-for (var i=0, lenhe=heaterseries.length; i<lenhe; i++)
-        {
-        heaterseries[i] = parseFloat(heaterseries[i],10);
-        tankseries[i] = parseFloat(tankseries[i],10);
-        if (heaterseries[i] > tankseries[i]+0.5 )  {
-                heateruse=++heateruse;
-        }
-}
 
 epocharraylength = epochseries.length;
 pharraylength = phseries.length;
@@ -260,15 +228,12 @@ tankarraylength = tankseries.length;
 document.write ("EpochSeries length is " + epocharraylength + "<BR>");
 document.write ("pHSeries length is " + pharraylength + "<BR>");
 document.write ("roomSeries length is " + roomarraylength + "<BR>");
-document.write ("heaterSeries length is " + heaterarraylength + "<BR>");
+document.write ("sumpSeries length is " + heaterarraylength + "<BR>");
 document.write ("tankSeries length is " + tankarraylength + "<BR>");
 document.write ("Max pH is " + maxph + "<BR>");
 document.write ("Min pH is " + minph + "<BR>");
-document.write ("Heater use is " + heateruse + "<BR>");
-// each Heater use is 5 mins = 1/12 of power at .6kW = 0.083*.6 = 0.05
-kw = heateruse*0.05;
-kwuse = Math.round(kw*100)/100;
-document.write ("Heaters used " + kwuse  + " kW<BR>");
+
+
 </script>
 Test 1
 	</body>
