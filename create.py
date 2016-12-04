@@ -1,6 +1,3 @@
-import csv
-import sys
-
 ## ask for file details
 print("Creating new file")
 name = input("Enter the name of the file:")
@@ -42,16 +39,22 @@ def adding_more():
 
 def do_you_want_more_data():
 
+	#requires adding_more() for arguement handling
+
 	answer = input("Do you want to add more data? [Y/N]")
+
 	if answer=="Y":
 		print("Ok lets add some more then...")
 		adding_more_data = adding_more()
-		more_data_again = more_data()
+		more_data_again = do_you_want_more_data()
+
 	elif answer=="N":
 		print("Ok. bye then")
 		sys.exit(0)
+
 	else:
 		print("Please answer Y or N")
+		ask_again = do_you_want_more_data()
 
 def main():
 	create()
@@ -59,5 +62,3 @@ def main():
 	do_you_want_more_data()
 
 main()
-
-
